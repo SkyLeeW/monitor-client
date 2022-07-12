@@ -5,6 +5,13 @@
       "Skylee\\MonitorClient\\": "src/"
     }
   },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Skylee\\MonitorClient\\MonitorClientPackageServiceProvider"
+      ]
+    }
+  },
   "authors": [
     {
       "name": "LeeWeiy",
