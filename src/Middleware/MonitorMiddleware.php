@@ -34,6 +34,10 @@ class MonitorMiddleware
      */
     public function terminate($request, $response): void
     {
+        if (env("app_debug") == true) {
+            return;
+        }
+
         $res             = [];
         $res["router"]   = $this->getRouter($request);
         $res["time"]     = $this->getCountRequestTimes();
