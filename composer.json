@@ -20,10 +20,6 @@
   ],
   "require": {
     "php": "^7.3|^8.0",
-    "ext-json": "*",
-    "illuminate/contracts": "^8.17|^9.0",
-    "illuminate/queue": "^8.17|^9.0",
-    "illuminate/support": "^8.17|^9.0",
-    "nesbot/carbon": "^2.17"
+    "ext-json": "*"
   }
 }
