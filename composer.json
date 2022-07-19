@@ -1,5 +1,5 @@
 {
-  "name": "skyleeW/monitor-client",
+  "name": "skyleewy/monitor-client",
   "autoload": {
     "psr-4": {
       "Skylee\\MonitorClient\\": "src/"
