@@ -74,7 +74,11 @@ class MonitorMiddleware
      */
     private function getRouter(Request $request): string
     {
-        $route = $request->route()->uri();
+        try {
+            $route = $request->route()->uri();
+        } catch (\Exception  $exception) {
+            return "#";
+        }
 
         return "/".$route;
     }
