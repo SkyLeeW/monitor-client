@@ -76,7 +76,7 @@ class MonitorMiddleware
     {
         try {
             $route = $request->route()->uri();
-        } catch (\Exception  $exception) {
+        } catch (\Throwable  $exception) {
             return "#";
         }
 
