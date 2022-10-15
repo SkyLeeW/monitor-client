@@ -9,6 +9,9 @@ class EventServiceProvider extends \App\Providers\EventServiceProvider
             \Illuminate\Database\Events\QueryExecuted::class => [
                 QueryListener::class,
             ],
+            \Illuminate\Log\Events\MessageLogged::class      => [
+                ErrorEventsNotification::class,
+            ],
         ];
 
     /**
