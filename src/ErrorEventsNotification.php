@@ -130,7 +130,7 @@ class ErrorEventsNotification
         if (empty($appId)) {
             return;
         }
-        $botUrl = env("botUrl");
+        $botUrl = env("APP_NOTIFY_URL");
         if (empty($botUrl)) {
             return;
         }
