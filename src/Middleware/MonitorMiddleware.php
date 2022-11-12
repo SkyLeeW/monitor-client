@@ -101,7 +101,7 @@ class MonitorMiddleware
      */
     private function getCountRequestTimes(): float
     {
-        //Fpm模式下,常量是不存在的
+        //octane cli模式下,常量是不存在的
         if (defined("LARAVEL_START")) {
             $startTime = LARAVEL_START;
         } else {
