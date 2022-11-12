@@ -10,12 +10,12 @@ class MonitorPredis
     public function conn()
     {
         $parameters = [
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'port' => env('REDIS_PORT', '6379'),
+            'host' => config("database.redis.default.host"),
+            'port' => config("database.redis.default.port"),
         ];
 
-        if ( ! empty(env('REDIS_PASSWORD'))) {
-            $parameters['password'] = env('REDIS_PASSWORD');
+        if ( ! empty(config("database.redis.default.password"))) {
+            $parameters['password'] = config("database.redis.default.password");
         }
 
         return new Client($parameters);

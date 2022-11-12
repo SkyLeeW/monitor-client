@@ -30,7 +30,7 @@ class ErrorEventsNotification
         string $message,
         array $content
     ): void {
-        if (env('APP_ENV') != 'production') {
+        if (config('app.env') != 'production') {
             return;
         }
 
@@ -125,12 +125,15 @@ class ErrorEventsNotification
     {
         $randomStr = Str::random(6);
         $time      = time();
-        $appId     = env('APP_NOTIFY_KEY');
-        $sign      = $this->sign($randomStr, $time, $appId);
+
+
+        $appId = config("app.app_notify_key", env('APP_NOTIFY_KEY'));
+
+        $sign = $this->sign($randomStr, $time, $appId);
         if (empty($appId)) {
             return;
         }
-        $botUrl = env("APP_NOTIFY_URL");
+        $botUrl = config("app.app_notify_url", env('APP_NOTIFY_URL'));
         if (empty($botUrl)) {
             return;
         }

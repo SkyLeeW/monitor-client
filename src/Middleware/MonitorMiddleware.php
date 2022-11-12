@@ -6,10 +6,12 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use Skylee\MonitorClient\MonitorPredis;
+use Skylee\MonitorClient\Xhprof\XhprofProcesser;
 
 class MonitorMiddleware
 {
     private $key = "monitor_task";
+
 
     /**
      * 处理传入的请求。
@@ -21,6 +23,10 @@ class MonitorMiddleware
      */
     public function handle($request, Closure $next)
     {
+//        xhprof_enable(XHPROF_FLAGS_MEMORY + XHPROF_FLAGS_NO_BUILTINS);
+
+        $request->attributes->set("init_time", microtime(true));
+
         return $next($request);
     }
 
@@ -34,16 +40,21 @@ class MonitorMiddleware
      */
     public function terminate($request, $response): void
     {
-        if (env("app_debug") == true) {
+        if (config("app.debug") == true) {
             return;
         }
+//todo xhprof 定量分析模块
+//        $xhprof_data = xhprof_disable();
+//
+//        $xhprof = new XhprofProcesser();
+//        $xhprof->start($xhprof_data);
 
         $res             = [];
         $res["router"]   = $this->getRouter($request);
         $res["time"]     = $this->getCountRequestTimes();
         $res["sql"]      = $this->sql($request);
         $res["memory"]   = round(memory_get_usage() / 1024 / 1024, 2);
-        $res["name"]     = env("APP_NAME");
+        $res["name"]     = config("app.name");
         $res["datetime"] = now()->toDateTimeString();
         $this->publish($res);
     }
@@ -90,8 +101,14 @@ class MonitorMiddleware
      */
     private function getCountRequestTimes(): float
     {
+        //Fpm模式下,常量是不存在的
+        if (defined("LARAVEL_START")) {
+            $startTime = LARAVEL_START;
+        } else {
+            $startTime = request()->attributes->get('init_time');
+        }
         $overTime = microtime(true);
-        $time     = bcsub($overTime, LARAVEL_START, 2);
+        $time     = bcsub($overTime, $startTime, 4);
 
         return $time;
     }
@@ -111,8 +128,9 @@ class MonitorMiddleware
             return [];
         }
         foreach ($sql as &$item) {
-            $item['time'] = round($item['time'] / 1000, 2);
+            $item['time'] = round($item['time'] / 1000, 6);
         }
+
 
         return $sql;
     }
