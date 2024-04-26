@@ -59,7 +59,7 @@ class ErrorEventsNotification
         $data["ip"] = $ip;
 
         //设置阻断,避免一直发送
-        if (self::IsItBlock($message)) {
+        if (self::IsItBlock($line)) {
             dispatch(function () use ($data) {
                 $this->notifyMessageToWechatBot($data);
             });
@@ -83,7 +83,7 @@ class ErrorEventsNotification
      */
     static function IsItBlock($errorMessage)
     {
-        $key     = "exceptions:key:".$errorMessage;
+        $key     = "exceptions:key:".md5($errorMessage);
         $counter = Cache::get($key);
 
         if (empty($counter)) {
@@ -104,8 +104,7 @@ class ErrorEventsNotification
                 //正常不调整时间
                 Cache::put(
                     $key,
-                    ['counter' => $count, 'exp' => $counter['exp']],
-                    $counter['exp']
+                    ['counter' => $count, 'exp' => $counter['exp']]
                 );
             }
 
